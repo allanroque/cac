@@ -2,4 +2,3 @@
 # nome ou IP do host automation controller/tower, exemplo:
 #automation_controller_host: ac01.aroque.com.br
 automation_controller_host:
-
