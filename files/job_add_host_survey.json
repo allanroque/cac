@@ -1,0 +1,30 @@
+{
+    "name": "Simple Survey",
+    "description": "Description of the simple survey",
+    "spec": [
+        {
+            "max": 2048,
+            "min": 0,
+            "type": "textarea",
+            "choices": "",
+            "default": "",
+            "required": true,
+            "variable": "server_list",
+            "new_question": true,
+            "question_name": "Adicione a lista de servidores ao inventário",
+            "question_description": "informação no modelo de lista"
+        },
+        {
+            "max": 4,
+            "min": 0,
+            "type": "text",
+            "choices": "",
+            "default": "",
+            "required": true,
+            "variable": "inventory_name",
+            "new_question": false,
+            "question_name": "Digite o nome do inventário",
+            "question_description": "INV-CAC-AC"
+        }    
+     ]
+}

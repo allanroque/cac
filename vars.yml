@@ -4,4 +4,10 @@
 ### ALTERAR ###
 automation_controller_host: ansible-1.st8q6.sandbox577.opentlc.com
 
+# adicionar o nome do projeto/repositorio principal em uso
+project_name: 
 
+# adicionar o nome do inventario principal em uso
+inventory_name: 
+
+server_list: |

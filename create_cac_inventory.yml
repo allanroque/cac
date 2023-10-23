@@ -17,3 +17,17 @@
       description: "Automation Controller"
       inventory: "INV-CAC-AC"
       state: present
+
+  - name: Create job template to add host in inventory
+    ansible.controller.job_template:
+      name: JOB-ADD-HOST-INVENTORY
+      job_type: "run"
+      organization: "Default"
+      inventory: "{{ inventory_name }}"
+      project: "project_name"
+      playbook: "inventory_name"
+      credentials:
+        - "CRED-AC-CAC"
+      state: "present"
+      survey_enabled: yes
+      survey_spec: "{{ lookup('file', 'job_add_host_survey.json') }}"
