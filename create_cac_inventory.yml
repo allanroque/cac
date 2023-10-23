@@ -3,10 +3,10 @@
   hosts: localhost
   gather_facts: false
   collections:
-     - ansible.controller
+     - collections/ansible.controller
   tasks:
   - name: Add inventory
-    inventory: 
+    ansible.controller.inventory: 
       name: "INV-CAC-AC"
       description: "configure an Automation Controller - Automation Controller"
       organization: "Default"
