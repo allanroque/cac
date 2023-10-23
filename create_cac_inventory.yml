@@ -25,7 +25,7 @@
       organization: "Default"
       inventory: "{{ inventory_name }}"
       project: "{{ project_name }}"
-      playbook: "{{ inventory_name }}"
+      playbook: "job_add_inventory.yml"
       credentials:
         - "CRED-AC-CAC"
       state: "present"
