@@ -17,10 +17,3 @@
     - name: Collect System Facts
       ansible.builtin.setup  # Este módulo coleta informações básicas sobre o sistema.
 
-    - name: Display Memory and CPU Facts
-      debug:
-        var: ansible_facts['ansible_memory_mb']['real']['total']
-
-    - name: Display CPU Cores
-      debug:
-        var: ansible_facts['ansible_processor_vcpus']
