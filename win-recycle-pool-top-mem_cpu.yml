@@ -13,7 +13,7 @@
     - name: Display Process List
       debug:
         var: process_list.stdout_lines
-        
+
     - name: Coletar uso de memória
       win_shell: |
         $mem = Get-WmiObject -Class Win32_OperatingSystem
