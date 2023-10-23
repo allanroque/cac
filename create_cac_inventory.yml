@@ -13,7 +13,7 @@
 
   - name: Add host to inventory INV-CAC-AC
     ansible.controller.host:
-      name: "{{ automation_controller_host | default('ansible-1.st8q6.sandbox577.opentlc.com') }}"
+      name: "{{ automation_controller_host }}"
       description: "Automation Controller"
       inventory: "INV-CAC-AC"
       state: present

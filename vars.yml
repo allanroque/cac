@@ -1,4 +1,7 @@
 ---
 # nome ou IP do host automation controller/tower, exemplo:
 #automation_controller_host: ac01.aroque.com.br
-automation_controller_host:
+### ALTERAR ###
+automation_controller_host: ansible-1.st8q6.sandbox577.opentlc.com
+
+
