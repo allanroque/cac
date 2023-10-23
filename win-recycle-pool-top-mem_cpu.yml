@@ -13,3 +13,13 @@
     - name: Display Process List
       debug:
         var: process_list.stdout_lines
+
+    - name: Exibir uso de CPU e memória
+      win_shell: |
+        Get-WmiObject -Class Win32_PerfFormattedData_PerfOS_Processor | Select-Object -Property Name, PercentProcessorTime
+        Get-WmiObject -Class Win32_PerfFormattedData_PerfOS_Memory | Select-Object -Property AvailableMBytes
+      register: system_info
+
+    - name: Exibir resultados
+      debug:
+        var: system_info.stdout_lines
