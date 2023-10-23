@@ -3,10 +3,11 @@
   hosts: server1
   gather_facts: false
   collections:
-    - ansible.controller
+    - community.windows
+    
   tasks:
 
    - name: Return information about an existing application pool
      community.windows.win_iis_webapppool:
-       name: DefaultAppPool
+       name: "{{ apppool }}"
        state: present
