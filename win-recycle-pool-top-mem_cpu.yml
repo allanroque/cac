@@ -13,19 +13,13 @@
     - name: Display Process List
       debug:
         var: process_list.stdout_lines
+        
+    - name: Coletar uso de memória
+      win_shell: |
+        $mem = Get-WmiObject -Class Win32_OperatingSystem
+        $mem.TotalVisibleMemorySize, $mem.FreePhysicalMemory
+      register: mem_usage
 
-    - name: Exibir uso de CPU
-      win_shell: Get-WmiObject -Class Win32_PerfFormattedData_PerfOS_Processor | Select-Object -Property Name, PercentProcessorTime
-      register: cpu_info
-
-    - name: Exibir uso de CPU
+    - name: Exibir uso de CPU e memória
       debug:
-        var: cpu_info.stdout_lines
-
-    - name: Exibir quantidade de memória disponível
-      win_shell: Get-WmiObject -Class Win32_PerfFormattedData_PerfOS_Memory | Select-Object -Property AvailableMBytes
-      register: mem_info
-
-    - name: Exibir quantidade de memória disponível
-      debug:
-        var: mem_info.stdout_lines
+        msg: "CPU Usage: {{ cpu_usage.stdout }}%, Memory Usage: {{ ((mem_usage.stdout[0] - mem_usage.stdout[1]) / mem_usage.stdout[0]) * 100 | round(2) }}%"
