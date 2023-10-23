@@ -1,10 +1,10 @@
 ---
 - name: restart pool
-  hosts: server1
+  hosts: windows
   gather_facts: false
   collections:
     - community.windows
-    
+
   tasks:
 
    - name: Return information about an existing application pool
