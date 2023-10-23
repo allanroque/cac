@@ -1,0 +1,12 @@
+---
+- name: Add inventory server
+  hosts: localhost
+  gather_facts: false
+  vars_files: vars.yml
+  tasks:
+  - name: Check existing hosts in AAP inventory
+    ansible.controller.host:
+      name: "{{ item }}"
+      inventory: "{{ inventory_name }}"
+    loop: "{{ server_list.splitlines() }}"
+    register: check_inventory_result
