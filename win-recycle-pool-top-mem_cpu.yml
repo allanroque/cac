@@ -30,4 +30,4 @@
 
     - name: Exibir uso de CPU e memória
       debug:
-        msg: "CPU Usage: {{ cpu_usage.stdout }}%, Memory Usage: {{ mem_usage.stdout }}%"
+        msg: "CPU Usage: {{ cpu_usage.stdout | regex_replace('\r\n', '') }}%, Memory Usage: {{ mem_usage.stdout | regex_replace('\r\n', '') }}%"
