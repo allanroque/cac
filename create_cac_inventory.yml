@@ -1,0 +1,11 @@
+---
+- name: configure an Automation Controller
+  hosts: localhost
+  vars:
+  tasks:
+  - name: Add inventory
+    inventory: 
+      name: "INV-CAC-AC"
+      description: "configure an Automation Controller - Automation Controller"
+      organization: "Default"
+      state: present
