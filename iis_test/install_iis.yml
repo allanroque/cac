@@ -1,6 +1,8 @@
 ---
 - name: Install the iis web service
   hosts: windows
+  vars:
+    iis_test_message: Test IIS
   tasks:
     - name: Install iis
       ansible.windows.win_feature:
