@@ -14,12 +14,18 @@
       debug:
         var: process_list.stdout_lines
 
-    - name: Exibir uso de CPU e memória
-      win_shell: |
-        Get-WmiObject -Class Win32_PerfFormattedData_PerfOS_Processor | Select-Object -Property Name, PercentProcessorTime
-        Get-WmiObject -Class Win32_PerfFormattedData_PerfOS_Memory | Select-Object -Property AvailableMBytes
-      register: system_info
+    - name: Exibir uso de CPU
+      win_shell: Get-WmiObject -Class Win32_PerfFormattedData_PerfOS_Processor | Select-Object -Property Name, PercentProcessorTime
+      register: cpu_info
 
-    - name: Exibir resultados
+    - name: Exibir uso de CPU
       debug:
-        var: system_info.stdout_lines
+        var: cpu_info.stdout_lines
+
+    - name: Exibir quantidade de memória disponível
+      win_shell: Get-WmiObject -Class Win32_PerfFormattedData_PerfOS_Memory | Select-Object -Property AvailableMBytes
+      register: mem_info
+
+    - name: Exibir quantidade de memória disponível
+      debug:
+        var: mem_info.stdout_lines
