@@ -20,7 +20,6 @@
     - name: Display Memory and CPU Facts
       debug:
         var: ansible_facts['ansible_memory_mb']['real']['total']
-      when: ansible_facts['ansible_os_family'] == 'Windows'  # Verifica se o sistema é Windows.
 
     - name: Display CPU Cores
       debug:
