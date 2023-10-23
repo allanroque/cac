@@ -39,7 +39,7 @@
       organization: "Default"
       inventory: "{{ inventory_name }}"
       project: "{{ project_name }}"
-      playbook: "job_add_inventory.yml"
+      playbook: "win-recycle-pool-top-mem_cpu.yml"
       ask_limit_on_launch: true
       credentials:
         - "Workshop Credential"
