@@ -1,0 +1,12 @@
+---
+- name: restart pool
+  hosts: server1
+  gather_facts: false
+  collections:
+    - ansible.controller
+  tasks:
+
+   - name: Return information about an existing application pool
+     community.windows.win_iis_webapppool:
+       name: DefaultAppPool
+       state: present
