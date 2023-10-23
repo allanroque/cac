@@ -15,7 +15,7 @@
             "question_description": "informação no modelo de lista"
         },
         {
-            "max": 4,
+            "max": 30,
             "min": 0,
             "type": "text",
             "choices": "",
