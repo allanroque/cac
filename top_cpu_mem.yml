@@ -1,0 +1,15 @@
+---
+- name: List Top 10 CPU and Memory Consuming Processes on Windows
+  hosts: windows
+  gather_facts: no  # Desativar a coleta de fatos para acelerar a execução
+
+  tasks:
+    - name: Get Process List
+      win_shell: |
+        Get-Process | Sort-Object -Property CPU -Descending | Select-Object -First 10 | Format-Table -AutoSize
+      register: process_list
+      changed_when: false  # Não considere isso como uma alteração
+
+    - name: Display Process List
+      debug:
+        var: process_list.stdout_lines
