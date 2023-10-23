@@ -1,8 +1,8 @@
 ---
 - name: List Top 10 CPU and Memory Consuming Processes on Windows
   hosts: windows
-  gather_facts: no  # Desativar a coleta de fatos para acelerar a execução
-
+  gather_facts: yes
+  
   tasks:
     - name: Get Process List
       win_shell: |
