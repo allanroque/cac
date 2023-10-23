@@ -14,25 +14,10 @@
       debug:
         var: process_list.stdout_lines
 
-    - name: Get process ID
-      win_shell: |
-        $id = (get-process  | where { $_.Name -eq 'w3wp'} | Sort-Object  -Property WS | Select-Object -Last 1).id
-        echo $id
-      register: output_id_w3wp
-      ignore_errors: true
+    - name: Get Memory and CPU Usage
+      win_command: "Get-Counter -Counter '\\Memory\\Available MBytes','\\Processor(_Total)\\% Processor Time' -SampleInterval 1 -MaxSamples 1 | Select-Object -ExpandProperty CounterSamples
+      register: system_usage
 
-    - name: Get process w3wp
-      win_command: c:\windows\system32\inetsrv\appcmd.exe list wp {{ item }}
-      with_items: 
-          - "{{ output_id_w3wp.stdout_lines }}"
-      ignore_errors: true
-
-    - name: Run 'ls' command
-      win_shell: |
-        Get-ChildItem -Path C:\Windows\System32\inetsrv\
-      register: ls_output
-
-    - name: Display 'ls' command output
+    - name: Display Memory and CPU Usage
       debug:
-        var: ls_output.stdout_lines
-
+        var: system_usage.stdout_lines
