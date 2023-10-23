@@ -24,8 +24,8 @@
       job_type: "run"
       organization: "Default"
       inventory: "{{ inventory_name }}"
-      project: "project_name"
-      playbook: "inventory_name"
+      project: "{{ project_name }}"
+      playbook: "{{ inventory_name }}"
       credentials:
         - "CRED-AC-CAC"
       state: "present"
