@@ -14,10 +14,14 @@
       debug:
         var: process_list.stdout_lines
 
-    - name: Get Memory and CPU Usage
-      win_command: "Get-Counter -Counter '\\Memory\\Available MBytes','\\Processor(_Total)\\% Processor Time' -SampleInterval 1 -MaxSamples 1 | Select-Object -ExpandProperty CounterSamples"
-      register: system_usage
+    - name: Collect System Facts
+      ansible.builtin.setup  # Este módulo coleta informações básicas sobre o sistema.
 
-    - name: Display Memory and CPU Usage
+    - name: Display Memory and CPU Facts
       debug:
-        var: system_usage.stdout_lines
+        var: ansible_facts['ansible_memory_mb']['real']['total']
+      when: ansible_facts['ansible_os_family'] == 'Windows'  # Verifica se o sistema é Windows.
+
+    - name: Display CPU Cores
+      debug:
+        var: ansible_facts['ansible_processor_vcpus']
