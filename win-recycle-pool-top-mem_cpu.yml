@@ -19,14 +19,15 @@
         $cpu = Get-WmiObject -Class Win32_PerfFormattedData_PerfOS_Processor | Where-Object { $_.Name -eq "_Total" }
         [math]::Round($cpu.PercentProcessorTime, 2)
       register: cpu_usage
+      changed_when: false
 
     - name: Coletar uso de memória
       win_shell: |
         $mem = Get-WmiObject -Class Win32_OperatingSystem
-        $mem.TotalVisibleMemorySize, $mem.FreePhysicalMemory
+        [math]::Round(($mem.TotalVisibleMemorySize - $mem.FreePhysicalMemory) / $mem.TotalVisibleMemorySize * 100, 2)
       register: mem_usage
+      changed_when: false
 
     - name: Exibir uso de CPU e memória
       debug:
-        msg: "CPU Usage: {{ cpu_usage.stdout }}%, Memory Usage: {{ ((mem_usage.stdout[0] - mem_usage.stdout[1]) / mem_usage.stdout[0]) * 100 | round(2) }}%"
-
+        msg: "CPU Usage: {{ cpu_usage.stdout }}%, Memory Usage: {{ mem_usage.stdout }}%"
