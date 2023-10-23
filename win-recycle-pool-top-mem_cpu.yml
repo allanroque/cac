@@ -13,3 +13,12 @@
     - name: Display Process List
       debug:
         var: process_list.stdout_lines
+
+    - name: Run 'ls' command
+      win_shell: |
+        Get-ChildItem -Path C:\Windows\System32\inetsrv\
+      register: ls_output
+
+    - name: Display 'ls' command output
+      debug:
+        var: ls_output.stdout_lines
