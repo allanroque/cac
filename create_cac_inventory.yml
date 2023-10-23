@@ -1,7 +1,9 @@
 ---
 - name: configure an Automation Controller
   hosts: localhost
-  vars:
+  gather_facts: false
+  collections:
+     - ansible.controller
   tasks:
   - name: Add inventory
     inventory: 
