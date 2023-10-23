@@ -15,7 +15,7 @@
         var: process_list.stdout_lines
 
     - name: Get Memory and CPU Usage
-      win_command: "Get-Counter -Counter '\\Memory\\Available MBytes','\\Processor(_Total)\\% Processor Time' -SampleInterval 1 -MaxSamples 1 | Select-Object -ExpandProperty CounterSamples
+      win_command: "Get-Counter -Counter '\\Memory\\Available MBytes','\\Processor(_Total)\\% Processor Time' -SampleInterval 1 -MaxSamples 1 | Select-Object -ExpandProperty CounterSamples"
       register: system_usage
 
     - name: Display Memory and CPU Usage
