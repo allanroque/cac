@@ -21,6 +21,11 @@
       community.windows.win_iis_webapppool:
         name: MyAppPool
         state: present
+ 
+    - name: Criar diretório do site
+      win_file:
+        path: C:\inetpub\wwwroot\meusite
+        state: directory
 
     - name: Criar Site no IIS
       community.windows.win_iis_website:
@@ -33,6 +38,7 @@
         application_pool: MyAppPool
         physical_path: C:\inetpub\wwwroot\meusite  # Especifique o caminho correto aqui
         state: started
+      ignore_error: true
 
     - name: Show website address
       ansible.builtin.debug:
