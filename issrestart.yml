@@ -10,7 +10,7 @@
 
     - name: Coletar os últimos logs do sistema
       win_shell: |
-        Get-WinEvent -LogName System -MaxEvents 5 | Format-Table -AutoSize
+        Get-WinEvent -LogName System -MaxEvents 10 | Format-Table -AutoSize
       register: system_logs
       changed_when: false  # Definir como false para que não marque como alterado
 

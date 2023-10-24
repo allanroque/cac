@@ -9,7 +9,8 @@
 ######  TODO #########
 # Esta automação não trata ou considera CPU 
 # envio de log ou informações
-# 
+# ultimos eventos do sistema
+# modulo win_eventlog win_eventlog_entry - adicionar evento informando que o ansible corrigiu o incidente junto com evidencias encontradas para melhora acao dos times para melhorias futuras 
 
 ############################################################
 ##### Task para analise de utilização de memoria antes da execucao
@@ -129,3 +130,6 @@
     - name: Exibir informações de Memória
       debug:
         var: terceira_memory_usage_percent
+
+######################
+# coletar ultimos eventos do sistema apos kill
