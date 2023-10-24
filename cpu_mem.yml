@@ -44,8 +44,11 @@
 
     - name: Armazenar informações em variáveis
       set_fact:
-        cpu_usage_percent: "{{ system_usage.stdout_lines[0] | regex_replace('(CPU Usage \\(\\%\\): )', '') | float }}"
-        memory_usage_percent: "{{ system_usage.stdout_lines[1] | regex_replace('(Memory Usage \\(\\%\\): )', '') | float }}"
+        cpu_usage_percent: "{{ system_usage.stdout_lines[0] | regex_replace('(CPU Usage \\(\\%\\): )', '') }}"
+        memory_usage_percent: "{{ system_usage.stdout_lines[1] | regex_replace('(Memory Usage \\(\\%\\): )', '') }}"
+
+      #  cpu_usage_percent: "{{ system_usage.stdout_lines[0] | regex_replace('(CPU Usage \\(\\%\\): )', '') | float }}"
+      #  memory_usage_percent: "{{ system_usage.stdout_lines[1] | regex_replace('(Memory Usage \\(\\%\\): )', '') | float }}"
 
     - name: Exibir informações coletadas cpu
       debug:
