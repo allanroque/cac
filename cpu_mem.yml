@@ -75,12 +75,12 @@
     - name: Coletar informações de memória
       win_shell: |
         $memoryInfo = Get-CimInstance -ClassName Win32_OperatingSystem
-        $memoryTotal = [math]::Round($memoryInfo.TotalVisibleMemorySize / 1MB, 2)
-        $memoryFree = [math]::Round($memoryInfo.FreePhysicalMemory / 1MB, 2)
+        $memoryTotal = [math]::Round($memoryInfo.TotalVisibleMemorySize / 1GB, 2)
+        $memoryFree = [math]::Round($memoryInfo.FreePhysicalMemory / 1GB, 2)
         $memoryUsed = $memoryTotal - $memoryFree
 
-        Write-Host "Total de Memória: ${memoryTotal} MB"
-        Write-Host "Memória em Uso: ${memoryUsed} MB"
+        Write-Host "Total de Memória: ${memoryTotal} GB"
+        Write-Host "Memória em Uso: ${memoryUsed} GB"
       register: memory_info
 
     - name: Exibir informações de memória
