@@ -1,0 +1,25 @@
+---
+- name: Coletar informações de CPU e Memória
+  hosts: windows
+  gather_facts: true  # Coletar informações do sistema
+
+  tasks:
+
+    - name: Obter informações de CPU e Memória
+      win_shell: |
+        $cpuInfo = Get-WmiObject -Class Win32_Processor | Measure-Object -Property NumberOfLogicalProcessors -Sum | Select-Object -ExpandProperty Sum
+        $memoryInfo = Get-WmiObject -Class Win32_ComputerSystem | Select-Object -ExpandProperty TotalPhysicalMemory
+        Write-Host "CPU Count: $cpuInfo"
+        Write-Host "Total Memory (Bytes): $memoryInfo"
+      register: system_info
+
+    - name: Armazenar informações em variáveis
+      set_fact:
+        cpu_count: "{{ system_info.stdout_lines[0] | regex_replace('(CPU Count: )', '') }}"
+        total_memory_bytes: "{{ system_info.stdout_lines[1] | regex_replace('(Total Memory \\(Bytes\\): )', '') }}"
+
+    - name: Exibir informações coletadas
+      debug:
+        var: 
+          - cpu_count
+          - total_memory_bytes
