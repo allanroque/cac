@@ -7,6 +7,11 @@
         name: Web-Server
         state: present
 
+    - name: Instalar Recursos de Gerenciamento do IIS
+      win_feature:
+        name: Web-Mgmt-Console
+        state: present
+
     - name: Colocar o arquivo index.html no servidor
       win_copy:
         src: index.html
@@ -26,13 +31,8 @@
             ip_address: "*"
             port: 80
         application_pool: MyAppPool
-        state: present
-
-    - name: Iniciar Site
-      community.windows.win_iis_website:
-        name: MyWebsite
         state: started
 
     - name: Show website address
       ansible.builtin.debug:
-        msg: http://{{ ansible_host }}  
+        msg: http://{{ ansible_host }}
