@@ -13,12 +13,12 @@
         dest: C:\inetpub\wwwroot\index.html
 
     - name: Criar Pool de Aplicativos
-      community.windows.win_iis_apppool:
+      community.windows.win_iis_webapppool:
         name: MyAppPool
         state: present
 
     - name: Criar Site no IIS
-      community.windows.win_iis_site:
+      community.windows.win_iis_website:
         name: MyWebsite
         state: started
         bindings:
