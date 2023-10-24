@@ -34,6 +34,9 @@
       debug:
         msg: "CONSUMO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
 
+##############################################
+#### Informacao consumo de cpu e memoria #####
+##############################################
     - name: Obter informações de Utilização de CPU e Memória
       win_shell: |
         $cpuUsage = Get-Counter -Counter '\Processor(_Total)\% Processor Time' -SampleInterval 1 -MaxSamples 1 | Select-Object -ExpandProperty CounterSamples | Select-Object -ExpandProperty CookedValue
@@ -43,8 +46,9 @@
 
     - name: Armazenar informações em variáveis
       set_fact:
-        cpu_usage_percent: "{{ system_usage.stdout_lines[0] | regex_replace('(CPU Usage \\(\\%\\): )', '') }}"
-        memory_usage_percent: "{{ system_usage.stdout_lines[1] | regex_replace('(Memory Usage \\(\\%\\): )', '') }}"
+        cpu_usage_percent: "{{ stdout_lines[0] | regex_replace('(CPU Usage \\(\\%\\): )', '') }}"
+        memory_usage_percent: "{{ stdout_lines[1] | regex_replace('(Memory Usage \\(\\%\\): )', '') }}"
+
 
       #  cpu_usage_percent: "{{ system_usage.stdout_lines[0] | regex_replace('(CPU Usage \\(\\%\\): )', '') | float }}"
       #  memory_usage_percent: "{{ system_usage.stdout_lines[1] | regex_replace('(Memory Usage \\(\\%\\): )', '') | float }}"
