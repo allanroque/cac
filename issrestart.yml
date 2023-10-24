@@ -1,6 +1,6 @@
 ---
 - name: Start IIS
-  hosts: windows_server 
+  hosts: windows
   gather_facts: no 
 
   tasks:
