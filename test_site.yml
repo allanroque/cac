@@ -2,20 +2,14 @@
 - name: Verificar se o Site e o Pool de Aplicativos estão ativos
   hosts: windows
   tasks:
-    - name: Verificar o status do Site
-      win_shell: Get-Website -Name "MyWebsite" | Select-Object State
-      register: website_status
-#      failed_when: "'Started' not in website_status.stdout"
+  - name: Verificar o status do Site
+    win_shell: Get-Website -Name "MyWebsite" | Select-Object State
+    register: site_status
 
-    - name: Verificar o status do Pool de Aplicativos
-      win_shell: Get-WebAppPoolState -Name "MyAppPool" | Select-Object Value
-      register: app_pool_status
-#      failed_when: "'Started' not in app_pool_status.stdout"
+  - name: Verificar o status do Pool de Aplicativos
+    win_shell: Get-WebAppPoolState -Name "MyAppPool" | Select-Object State
+    register: app_pool_status
 
-    - name: Exibir status do Site
-      debug:
-        msg: "O Site está ativo"
-
-    - name: Exibir status do Pool de Aplicativos
-      debug:
-        msg: "O Pool de Aplicativos está ativo"
+  - name: Exibir status do Site e do Pool de Aplicativos
+    debug:
+      msg: "Status do Site: {{ site_status.stdout.Trim() }}, Status do Pool de Aplicativos: {{ app_pool_status.stdout.Trim() }}"
