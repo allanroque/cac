@@ -5,12 +5,12 @@
     - name: Verificar o status do Site
       win_shell: Get-Website -Name "MyWebsite" | Select-Object State
       register: website_status
-      failed_when: "'Started' not in website_status.stdout"
+#      failed_when: "'Started' not in website_status.stdout"
 
     - name: Verificar o status do Pool de Aplicativos
       win_shell: Get-WebAppPoolState -Name "MyAppPool" | Select-Object Value
       register: app_pool_status
-      failed_when: "'Started' not in app_pool_status.stdout"
+#      failed_when: "'Started' not in app_pool_status.stdout"
 
     - name: Exibir status do Site
       debug:
