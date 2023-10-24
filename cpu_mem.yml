@@ -18,8 +18,10 @@
         cpu_count: "{{ system_info.stdout_lines[0] | regex_replace('(CPU Count: )', '') }}"
         total_memory_bytes: "{{ system_info.stdout_lines[1] | regex_replace('(Total Memory \\(Bytes\\): )', '') }}"
 
-    - name: Exibir informações coletadas
+    - name: Exibir informações coletadas CPU
       debug:
-        var: 
-          - cpu_count
-          - total_memory_bytes
+        var: cpu_count
+
+    - name: Exibir informações coletadas Mem
+      debug:
+        var: total_memory_bytes
