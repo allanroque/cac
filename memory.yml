@@ -1,21 +1,16 @@
 ---
-- name: Coletar informações de CPU e Memória
+- name: Coletar e Exibir Informações de Memória
   hosts: windows
-  gather_facts: false  # Desligar coletar informações do sistema
+  gather_facts: yes  # Coletar informações do sistema
 
   tasks:
-##############################################
-#### Informacao consumo de cpu e memoria #####
-##############################################
-    - name: Obter informações de CPU e Memória
+    - name: Obter informações de Memória
       win_shell: |
-        $cpuUsage = Get-Counter -Counter '\Processor(_Total)\% Processor Time' -SampleInterval 1 -MaxSamples 1 | Select-Object -ExpandProperty CounterSamples | Select-Object -ExpandProperty CookedValue
         $memoryInfo = Get-CimInstance -ClassName Win32_OperatingSystem
         $memoryUsed = $memoryInfo.TotalVisibleMemorySize - $memoryInfo.FreePhysicalMemory
         $memoryUsage = [math]::Round(($memoryUsed / $memoryInfo.TotalVisibleMemorySize) * 100, 2)
 
         $info = @{
-          cpu_usage_percent = $cpuUsage
           memory_usage_percent = $memoryUsage
         }
 
@@ -24,9 +19,8 @@
       register: system_info
       changed_when: false
 
-    - name: Extrair informações de CPU e Memória
+    - name: Extrair informações de Memória
       set_fact:
-        system_info_json: "{{ system_info.stdout }}"
         memory_usage_percent: "{{ (system_info.stdout | from_json).memory_usage_percent }}"
 
     - name: Exibir informações de Memória
