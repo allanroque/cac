@@ -40,7 +40,6 @@
         $memoryUsage = (Get-WmiObject -Class Win32_OperatingSystem).FreePhysicalMemory / (Get-WmiObject -Class Win32_OperatingSystem).TotalVisibleMemorySize * 100
         Write-Host "CPU Usage (%): $cpuUsage"
         Write-Host "Memory Usage (%): $memoryUsage"
-      register: system_usage
 
     - name: Armazenar informações em variáveis
       set_fact:
