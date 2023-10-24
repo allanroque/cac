@@ -41,16 +41,22 @@
       win_shell: |
         $cpuUsage = Get-Counter -Counter '\Processor(_Total)\% Processor Time' -SampleInterval 1 -MaxSamples 1 | Select-Object -ExpandProperty CounterSamples | Select-Object -ExpandProperty CookedValue
         $memoryUsage = (Get-WmiObject -Class Win32_OperatingSystem).FreePhysicalMemory / (Get-WmiObject -Class Win32_OperatingSystem).TotalVisibleMemorySize * 100
-        Write-Host "CPU Usage (%): $cpuUsage"
-        Write-Host "Memory Usage (%): $memoryUsage"
-        [PSCustomObject]@{
-          cpu_usage_percent: $cpuUsage
-          memory_usage_percent: $memoryUsage
-        } | ConvertTo-Json
+
+        # Criar um hash table
+        $info = @{
+          cpu_usage_percent = $cpuUsage
+          memory_usage_percent = $memoryUsage
+        }
+
+        # Converter o hash table para JSON
+        $infoJson = $info | ConvertTo-Json
+        Write-Host $infoJson
       register: system_info
+      changed_when: false
 
     - name: Extrair informações de CPU e Memória
       set_fact:
+        system_info_json: "{{ system_info.stdout }}"
         cpu_usage_percent: "{{ (system_info.stdout | from_json).cpu_usage_percent }}"
         memory_usage_percent: "{{ (system_info.stdout | from_json).memory_usage_percent }}"
 
