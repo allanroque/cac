@@ -8,11 +8,6 @@
 ########
 # Adicionar enriquecimento dos logs e informações, essas informações podem ser enviadas para o incidente
 
-    - name: Coletar informações do IIS
-      win_command: Get-WindowsFeature -Name Web-Server | Select-Object -Property DisplayName,Installed
-      register: iis_info
-      changed_when: false  # Definir como false para que não marque como alterado
-
     - name: Exibir informações do IIS
       debug:
         var: iis_info.stdout_lines
