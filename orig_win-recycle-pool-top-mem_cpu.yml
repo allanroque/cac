@@ -4,6 +4,14 @@
   gather_facts: False #a automacao nao utiliza facts do servidor durante a execucao
 
   tasks:
+
+######################
+######  TODO #########
+# Esta automação não trata ou considera CPU 
+# envio de log ou informações
+# 
+
+############################################################
 ##### Task para analise de utilização de memoria antes da execucao
     - name: Obter informações de Memória 
       win_shell: |
@@ -64,9 +72,10 @@
         }
       ignore_errors: true      
 
+############################################################
 ##### Task para analise de utilizacao de memoria apos kill dos processo de RDP e identificar se faz sentido realizar o kill dos processo w3wp
 # essa ação pode melhora a experiencia de selfhealing ao mesmo tempo que aumenta a disponibilidade dos servico
-
+############################################################
     - name: Obter informações de Memória 
       win_shell: |
         $memoryInfo = Get-CimInstance -ClassName Win32_OperatingSystem
@@ -94,6 +103,9 @@
       win_shell: |
         $id = (get-process  | where { $_.Name -eq 'w3wp'} | Sort-Object  -Property WS | Select-Object -Last 1).id
         Kill $id -Force
+
+############################################################
+############################################################
 
     - name: Obter informações de Memória 
       win_shell: |
