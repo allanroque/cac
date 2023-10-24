@@ -31,6 +31,7 @@
             ip_address: "*"
             port: 80
         application_pool: MyAppPool
+        physical_path: C:\inetpub\wwwroot\meusite  # Especifique o caminho correto aqui
         state: started
 
     - name: Show website address
