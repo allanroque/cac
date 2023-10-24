@@ -61,7 +61,6 @@
     - name: Exibir informações coletadas cpu
       debug:
         var: cpu_usage_percent
-          - cpu_usage_percent
 
     - name: Exibir informações coletadas mem
       debug:
