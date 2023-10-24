@@ -1,0 +1,52 @@
+---
+- name: Reciclagem Pool - Maior ofensor CPU/Memory
+  hosts: all
+  gather_facts: true
+
+  tasks:
+
+    - name: Get process ID
+      win_shell: |
+        $id = (get-process  | where { $_.Name -eq 'w3wp'} | Sort-Object  -Property WS | Select-Object -Last 1).id
+        echo $id
+      register: output_id_w3wp
+      ignore_errors: true
+
+    - name: Get process w3wp
+      win_command: c:\windows\system32\inetsrv\appcmd.exe list wp {{ item }}
+      with_items: 
+          - "{{ output_id_w3wp.stdout_lines }}"
+      ignore_errors: true
+
+    - name: Get Disconnect Sessions 
+      win_shell: |
+        quser 
+      register: quser_out
+      ignore_errors: true
+
+    - name: Kill Disconnect Sessions RDP 2012
+      win_shell: |
+        quser | Select-Object -Skip 1 | select-string "Disc"| ForEach-Object {
+            $id = ($_ -split ' +')[-6]
+            logoff $id
+        }
+      ignore_errors: true
+
+    - name: Kill Disconnect Sessions RDP 2016/2019
+      win_shell: |
+        quser | Select-Object -Skip 1 | select-string "Disc"| ForEach-Object {
+            $id = ($_ -split ' +')[-5]
+            logoff $id
+        }
+      ignore_errors: true      
+
+    - name: Kill process - top memory
+      win_shell: |
+        $id = (get-process  | where { $_.Name -eq 'w3wp'} | Sort-Object  -Property WS | Select-Object -Last 1).id
+        Kill $id -Force
+
+#    - name: Kill process - top CPU
+#      win_shell: |
+#        $id = (get-process  | where { $_.Name -eq 'w3wp'} | Sort-Object -Property CPU -Descending | Select-Object -First 1).id
+#        kill $id -Force
+#      ignore_errors: true
