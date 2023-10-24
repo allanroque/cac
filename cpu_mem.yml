@@ -43,11 +43,12 @@
         $memoryUsage = (Get-WmiObject -Class Win32_OperatingSystem).FreePhysicalMemory / (Get-WmiObject -Class Win32_OperatingSystem).TotalVisibleMemorySize * 100
         Write-Host "CPU Usage (%): $cpuUsage"
         Write-Host "Memory Usage (%): $memoryUsage"
+      register: system_usage
 
     - name: Debug saída da tarefa anterior
       debug:
         var: system_usage.stdout
-        
+
     - name: Armazenar informações em variáveis
       set_fact:
         cpu_usage_percent: "{{ stdout_lines[0] | regex_replace('(CPU Usage \\(\\%\\): )', '') }}"
