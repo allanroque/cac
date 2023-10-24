@@ -1,0 +1,12 @@
+---
+- name: Start IIS
+  hosts: windows_server 
+  gather_facts: no 
+
+  tasks:
+    - name: Start IIS Service
+      win_service:
+        name: W3SVC
+        start_mode: auto
+        state: restarted
+      become: yes

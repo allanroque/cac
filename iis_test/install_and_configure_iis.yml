@@ -1,0 +1,38 @@
+---
+- name: Instalação e Configuração do IIS
+  hosts: windows
+  tasks:
+    - name: Instalar o IIS
+      win_feature:
+        name: Web-Server
+        state: present
+
+    - name: Colocar o arquivo index.html no servidor
+      win_copy:
+        src: index.html
+        dest: C:\inetpub\wwwroot\index.html
+
+    - name: Criar Pool de Aplicativos
+      win_iis_apppool:
+        name: MyAppPool
+        state: present
+
+    - name: Criar Site no IIS
+      win_iis_site:
+        name: MyWebsite
+        state: started
+        bindings:
+          - protocol: http
+            ip_address: "*"
+            port: 80
+        application_pool: MyAppPool
+        state: present
+
+    - name: Iniciar Site
+      win_iis_website:
+        name: MyWebsite
+        state: started
+
+    - name: Show website address
+      ansible.builtin.debug:
+        msg: http://{{ ansible_host }}  
