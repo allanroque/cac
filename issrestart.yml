@@ -8,10 +8,6 @@
 ########
 # Adicionar enriquecimento dos logs e informações, essas informações podem ser enviadas para o incidente
 
-    - name: Exibir informações do IIS
-      debug:
-        var: iis_info.stdout_lines
-
     - name: Coletar os últimos logs do sistema
       win_shell: |
         Get-WinEvent -LogName System -MaxEvents 5 | Format-Table -AutoSize
@@ -26,4 +22,3 @@
         name: W3SVC
         start_mode: auto
         state: restarted
-      become: yes
