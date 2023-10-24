@@ -5,6 +5,9 @@
 
   tasks:
 
+######################################
+#### Informacao de cpu e memoria #####
+######################################
     - name: Obter informações de CPU e Memória
       win_shell: |
         $cpuInfo = Get-WmiObject -Class Win32_Processor | Measure-Object -Property NumberOfLogicalProcessors -Sum | Select-Object -ExpandProperty Sum
@@ -25,3 +28,30 @@
     - name: Exibir informações coletadas Mem
       debug:
         var: total_memory_bytes
+
+
+    - name: Exibir informações coletadas CPU
+      debug:
+        msg: "CONSUMO!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
+
+    - name: Obter informações de Utilização de CPU e Memória
+      win_shell: |
+        $cpuUsage = Get-Counter -Counter '\Processor(_Total)\% Processor Time' -SampleInterval 1 -MaxSamples 1 | Select-Object -ExpandProperty CounterSamples | Select-Object -ExpandProperty CookedValue
+        $memoryUsage = (Get-WmiObject -Class Win32_OperatingSystem).FreePhysicalMemory / (Get-WmiObject -Class Win32_OperatingSystem).TotalVisibleMemorySize * 100
+        Write-Host "CPU Usage (%): $cpuUsage"
+        Write-Host "Memory Usage (%): $memoryUsage"
+      register: system_usage
+
+    - name: Armazenar informações em variáveis
+      set_fact:
+        cpu_usage_percent: "{{ system_usage.stdout_lines[0] | regex_replace('(CPU Usage \\(\\%\\): )', '') | float }}"
+        memory_usage_percent: "{{ system_usage.stdout_lines[1] | regex_replace('(Memory Usage \\(\\%\\): )', '') | float }}"
+
+    - name: Exibir informações coletadas cpu
+      debug:
+        var: cpu_usage_percent
+          - cpu_usage_percent
+
+    - name: Exibir informações coletadas mem
+      debug:
+        var: memory_usage_percent
