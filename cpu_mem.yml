@@ -37,31 +37,27 @@
 ##############################################
 #### Informacao consumo de cpu e memoria #####
 ##############################################
-    - name: Obter informações de Utilização de CPU e Memória
+    - name: Executar script PowerShell
       win_shell: |
         $cpuUsage = Get-Counter -Counter '\Processor(_Total)\% Processor Time' -SampleInterval 1 -MaxSamples 1 | Select-Object -ExpandProperty CounterSamples | Select-Object -ExpandProperty CookedValue
         $memoryUsage = (Get-WmiObject -Class Win32_OperatingSystem).FreePhysicalMemory / (Get-WmiObject -Class Win32_OperatingSystem).TotalVisibleMemorySize * 100
         Write-Host "CPU Usage (%): $cpuUsage"
         Write-Host "Memory Usage (%): $memoryUsage"
-      register: system_usage
+        [PSCustomObject]@{
+          cpu_usage_percent: $cpuUsage
+          memory_usage_percent: $memoryUsage
+        } | ConvertTo-Json
+      register: system_info
 
-    - name: Debug saída da tarefa anterior
-      debug:
-        var: system_usage.stdout
-
-    - name: Armazenar informações em variáveis
+    - name: Extrair informações de CPU e Memória
       set_fact:
-        cpu_usage_percent: "{{ stdout_lines[0] | regex_replace('(CPU Usage \\(\\%\\): )', '') }}"
-        memory_usage_percent: "{{ stdout_lines[1] | regex_replace('(Memory Usage \\(\\%\\): )', '') }}"
+        cpu_usage_percent: "{{ (system_info.stdout | from_json).cpu_usage_percent }}"
+        memory_usage_percent: "{{ (system_info.stdout | from_json).memory_usage_percent }}"
 
-
-      #  cpu_usage_percent: "{{ system_usage.stdout_lines[0] | regex_replace('(CPU Usage \\(\\%\\): )', '') | float }}"
-      #  memory_usage_percent: "{{ system_usage.stdout_lines[1] | regex_replace('(Memory Usage \\(\\%\\): )', '') | float }}"
-
-    - name: Exibir informações coletadas cpu
+    - name: Exibir informações de CPU
       debug:
         var: cpu_usage_percent
 
-    - name: Exibir informações coletadas mem
+    - name: Exibir informações de Memória
       debug:
         var: memory_usage_percent
