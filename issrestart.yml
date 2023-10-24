@@ -17,6 +17,7 @@
     - name: Exibir os últimos logs do sistema
       debug:
         var: system_logs.stdout_lines
+        
     - name: Start IIS Service
       win_service:
         name: W3SVC
