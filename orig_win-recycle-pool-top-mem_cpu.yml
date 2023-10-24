@@ -1,9 +1,32 @@
 ---
 - name: Reciclagem Pool - Maior ofensor CPU/Memory
   hosts: all
-  gather_facts: true
+  gather_facts: False #a automacao nao utiliza facts do servidor durante a execucao
 
   tasks:
+##### Task para analise de utilização de memoria antes da execucao
+    - name: Obter informações de Memória 
+      win_shell: |
+        $memoryInfo = Get-CimInstance -ClassName Win32_OperatingSystem
+        $memoryUsed = $memoryInfo.TotalVisibleMemorySize - $memoryInfo.FreePhysicalMemory
+        $memoryUsage = [math]::Round(($memoryUsed / $memoryInfo.TotalVisibleMemorySize) * 100, 2)
+
+        $info = @{
+          memory_usage_percent = $memoryUsage
+        }
+
+        $infoJson = $info | ConvertTo-Json
+        Write-Host $infoJson
+      register: system_info
+      changed_when: false
+
+    - name: Extrair informações de Memória
+      set_fact:
+        primeira_memory_usage_percent: "{{ (system_info.stdout | from_json).memory_usage_percent }}"
+
+    - name: Exibir informações de Memória
+      debug:
+        var: primeira_memory_usage_percent
 
     - name: Get process ID ##Esta task obtém o ID do processo 'w3wp' (IIS Worker Process) com a maior utilização de memória e Registra a saída na variável output_id_w3wp
       win_shell: |
@@ -41,13 +64,56 @@
         }
       ignore_errors: true      
 
+##### Task para analise de utilizacao de memoria apos kill dos processo de RDP e identificar se faz sentido realizar o kill dos processo w3wp
+# essa ação pode melhora a experiencia de selfhealing ao mesmo tempo que aumenta a disponibilidade dos servico
+
+    - name: Obter informações de Memória 
+      win_shell: |
+        $memoryInfo = Get-CimInstance -ClassName Win32_OperatingSystem
+        $memoryUsed = $memoryInfo.TotalVisibleMemorySize - $memoryInfo.FreePhysicalMemory
+        $memoryUsage = [math]::Round(($memoryUsed / $memoryInfo.TotalVisibleMemorySize) * 100, 2)
+
+        $info = @{
+          memory_usage_percent = $memoryUsage
+        }
+
+        $infoJson = $info | ConvertTo-Json
+        Write-Host $infoJson
+      register: system_info
+      changed_when: false
+
+    - name: Extrair informações de Memória
+      set_fact:
+        segunda_memory_usage_percent: "{{ (system_info.stdout | from_json).memory_usage_percent }}"
+
+    - name: Exibir informações de Memória
+      debug:
+        var: segunda_memory_usage_percent
+
     - name: Kill process - top memory # Esta tarefa encerra o processo 'w3wp' com a maior utilização de memória.
       win_shell: |
         $id = (get-process  | where { $_.Name -eq 'w3wp'} | Sort-Object  -Property WS | Select-Object -Last 1).id
         Kill $id -Force
 
-#    - name: Kill process - top CPU
-#      win_shell: |
-#        $id = (get-process  | where { $_.Name -eq 'w3wp'} | Sort-Object -Property CPU -Descending | Select-Object -First 1).id
-#        kill $id -Force
-#      ignore_errors: true
+    - name: Obter informações de Memória 
+      win_shell: |
+        $memoryInfo = Get-CimInstance -ClassName Win32_OperatingSystem
+        $memoryUsed = $memoryInfo.TotalVisibleMemorySize - $memoryInfo.FreePhysicalMemory
+        $memoryUsage = [math]::Round(($memoryUsed / $memoryInfo.TotalVisibleMemorySize) * 100, 2)
+
+        $info = @{
+          memory_usage_percent = $memoryUsage
+        }
+
+        $infoJson = $info | ConvertTo-Json
+        Write-Host $infoJson
+      register: system_info
+      changed_when: false
+
+    - name: Extrair informações de Memória
+      set_fact:
+        terceira_memory_usage_percent: "{{ (system_info.stdout | from_json).memory_usage_percent }}"
+
+    - name: Exibir informações de Memória
+      debug:
+        var: terceira_memory_usage_percent

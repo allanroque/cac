@@ -4,6 +4,12 @@
   gather_facts: yes  # Coletar informações do sistema
 
   tasks:
+
+    - name: Exibir informações coletadas CPU
+      debug:
+        msg: "AÇÃO 1 RDP - AÇÃO 2 - w3wp"
+
+
     - name: Obter informações de Memória
       win_shell: |
         $memoryInfo = Get-CimInstance -ClassName Win32_OperatingSystem
